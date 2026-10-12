@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 6 쓰기 안내</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Nunito:wght@600;800&display=swap">
+<style>
+:root{
+  --bg:#f3f7f1; --paper:#ffffff; --ink:#1f2a22; --muted:#5b6b5f; --line:#d6e2d3;
+  --clover:#2f8a4c; --clover-soft:#e2f2e5; --sun:#f2b53a; --sun-soft:#fdf1d6;
+  --red:#c9443a; --red-soft:#fbe4e1; --blue:#2f6fb3; --blue-soft:#e1ecf8; --plum:#8a4fa8; --plum-soft:#f1e6f6;
+  --f-display:"Jua","Gowun Dodum",sans-serif;
+  --f-body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-en:"Nunito","Gowun Dodum",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#141a16; --paper:#1d2520; --ink:#e7efe8; --muted:#a3b3a7; --line:#33423a;
+  --clover:#6cc98a; --clover-soft:#1f3a29; --sun:#f2c35e; --sun-soft:#3a3018;
+  --red:#ff8a7e; --red-soft:#3d2220; --blue:#82b4ea; --blue-soft:#1d2c3f; --plum:#cf9ce6; --plum-soft:#33233d; color-scheme:dark}}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.55}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 20px 28px;display:flex;flex-direction:column;gap:16px}
+.en{font-family:var(--f-en);font-weight:600}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.kicker{font-family:var(--f-en);font-weight:800;color:var(--clover);letter-spacing:.04em;font-size:15px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,3.4vw,36px);line-height:1.2;margin:2px 0 0}
+.sub{color:var(--muted);font-size:17px}
+
+nav.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:sticky;top:0;z-index:5;background:var(--bg);padding-block:6px}
+nav.steps button{font:inherit;text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:14px;padding:10px 14px;cursor:pointer;display:flex;gap:10px;align-items:center;min-width:0}
+nav.steps button .n{font-family:var(--f-display);font-size:22px;width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--clover-soft);color:var(--clover)}
+nav.steps button b{font-family:var(--f-display);font-weight:400;font-size:20px;display:block;line-height:1.2}
+nav.steps button small{color:var(--muted);font-size:14px}
+nav.steps
