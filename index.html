@@ -72,6 +72,32 @@ ol.ex{padding-left:1.4em}
 .sotip .ex{font-size:18px}
 .st{text-decoration:underline wavy var(--sun);text-decoration-thickness:2px;text-underline-offset:5px;font-weight:800}
 
+/* Chatbot */
+.bot{background:var(--paper);border:2px solid var(--clover);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.bot-head{display:flex;gap:12px;align-items:center}
+.bot-ava{width:44px;height:44px;border-radius:50%;background:var(--clover-soft);display:grid;place-items:center;font-size:24px;flex:none}
+.bot-head b{font-family:var(--f-display);font-weight:400;font-size:22px;display:block;line-height:1.2}
+.bot-head small{color:var(--muted);font-size:15px}
+.log{display:flex;flex-direction:column;gap:10px;max-height:520px;overflow-y:auto;padding:4px 2px}
+.msg{max-width:100%;border-radius:14px;padding:10px 14px;min-width:0}
+.msg.me{align-self:flex-end;background:var(--clover);color:var(--paper);font-size:18px;max-width:80%}
+.msg.ai{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.msg.ai h4{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:20px}
+.msg.ai .born{font-family:var(--f-en);font-weight:600;font-size:18px;margin:0 0 8px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.opts{grid-template-columns:1fr}}
+.opts h5{margin:0 0 4px;font-size:16px;color:var(--muted)}
+.opts ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:5px}
+.opts li{font-size:18px}
+.msg.ai .so{margin:10px 0 0;background:var(--sun-soft);border-radius:10px;padding:6px 10px;font-size:17px}
+.msg.ai .hint{margin:8px 0 0;font-size:15px;color:var(--muted)}
+.quick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.quick span{font-size:14px;color:var(--muted)}
+.quick button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 11px;cursor:pointer}
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;font:inherit;font-size:18px;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.ask input:focus{outline:none;border-color:var(--clover)}
+
 /* Step 2 */
 .two{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:900px){.two{grid-template-columns:1fr}}
@@ -187,6 +213,19 @@ h3.sec{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
       </article>
     </div>
 
+    <section class="bot" aria-label="인물 도우미">
+      <div class="bot-head">
+        <div class="bot-ava" aria-hidden="true">🍀</div>
+        <div><b>인물 도우미</b><small>인물 이름을 쓰면 한 일과 배울 점을 우리말로 5가지씩 알려 줘요. 골라서 <u>내가 영어로</u> 바꿔 써요!</small></div>
+      </div>
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="quick" id="quick"></div>
+      <form class="ask" id="ask" autocomplete="off">
+        <input id="askInput" type="text" placeholder="예: 유관순, 장영실, 이순신" aria-label="인물 이름">
+        <button class="btn" type="submit">물어보기</button>
+      </form>
+    </section>
+
     <div class="next"><span></span><button class="btn" data-go="2">다 채웠어요 → 모델 글 보기</button></div>
   </section>
 
@@ -219,7 +258,7 @@ h3.sec{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
           <ul>
             <li><b>⭐ 핵심 문법 so ~ that</b>: <span class="en st">물결 밑줄</span> 문장을 찾아보세요. "너무 ~해서 …하다"</li>
             <li>첫 문장은 질문이나 직업 소개로 시작해요. <span class="en">Do you know ~?</span></li>
-            <li>한 일을 이어 줄 때: <span class="en">also, There, Later, so</span></li>
+            <li>한 일을 이어 줄 때: <span class="en">also, There, Later</span></li>
             <li>마지막 문장은 나의 다짐: <span class="en">I want to ~ like him/her.</span></li>
           </ul>
         </div>
@@ -233,7 +272,7 @@ h3.sec{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
     <div class="two">
       <div class="checks">
         <h3 class="sec">✅ 내 글 점검표 <span class="sub">(확인했으면 체크)</span></h3>
-        <div class="progress"><div class="bar"><i id="barFill"></i></div><span id="count">0 / 6</span></div>
+        <div class="progress"><div class="bar"><i id="barFill"></i></div><span id="count">0 / 7</span></div>
 
         <div class="ck"><input type="checkbox" id="c7"><label for="c7">⭐ <span class="en">so ~ that</span> 문장을 1개 이상 썼나요?</label>
           <div class="pair"><span class="bad">He was very kind that everyone loved him.</span><span class="good">He was so kind that everyone loved him.</span></div></div>
@@ -294,6 +333,76 @@ function showPerson(k){
 }
 document.querySelectorAll('#people .chip').forEach(c=>c.addEventListener("click",()=>showPerson(c.dataset.who)));
 showPerson("lee");
+
+/* ===== 인물 도우미 데이터 (한글) ===== */
+const DB=[
+ {n:"유관순",k:["유관순","관순","yugwansun","gwansun"],p:"여",b:"1902년, 충청남도 천안",
+  d:["이화학당에서 공부했다","1919년 서울에서 3·1 운동에 참여했다","고향 천안으로 내려가 만세 운동을 준비했다","아우내 장터에서 태극기를 나누어 주며 만세 운동을 이끌었다","감옥에 갇혀서도 독립 만세를 외쳤다"],
+  l:["나라를 사랑하는 마음이 소중하다","어린 나이에도 옳은 일을 위해 용기를 낼 수 있다","어려움 속에서도 뜻을 굽히지 말아야 한다","자유와 평화는 소중하다","우리가 누리는 오늘은 많은 사람의 희생 덕분이다"],
+  s:"그녀는 너무 용감해서 감옥에서도 만세를 외쳤다"},
+ {n:"김구",k:["김구","백범","kimgu"],p:"남",b:"1876년, 황해도 해주",
+  d:["평생을 독립운동에 바쳤다","대한민국 임시정부를 이끌었다","한인애국단을 만들었다","자서전 『백범일지』를 썼다","광복 후 남과 북이 하나 된 나라를 만들기 위해 노력했다"],
+  l:["나라를 위해 헌신하는 마음이 중요하다","꿈을 위해 끝까지 노력해야 한다","문화의 힘이 나라를 강하게 만든다","하나 됨과 평화가 소중하다","어려워도 희망을 잃지 말아야 한다"],
+  s:"그는 나라를 너무 사랑해서 평생을 독립운동에 바쳤다"},
+ {n:"장영실",k:["장영실","영실","jangyeongsil","yeongsil"],p:"남",b:"정확한 해는 알 수 없음(1390년쯤), 동래(지금의 부산)",
+  d:["신분이 낮았지만 실력으로 세종대왕의 인정을 받았다","스스로 시간을 알려 주는 물시계 '자격루'를 만들었다","해시계 '앙부일구'를 만드는 데 참여했다","비의 양을 재는 측우기를 만드는 데 참여했다","하늘을 관측하는 천문 기구를 만들었다"],
+  l:["신분보다 노력과 실력이 중요하다","과학 기술로 사람들의 삶을 도울 수 있다","끊임없이 연구하고 도전해야 한다","나의 재능을 사회를 위해 써야 한다","다른 사람의 능력을 알아보고 기회를 주는 것이 중요하다"],
+  s:"그는 너무 뛰어나서 세종대왕이 그에게 벼슬을 주었다"},
+ {n:"세종대왕",k:["세종","sejong"],p:"남",b:"1397년, 한양(지금의 서울)",
+  d:["백성이 쉽게 읽고 쓸 수 있도록 한글을 만들었다","측우기 같은 과학 기구를 만들게 했다","집현전에 학자들을 모았다","농민을 돕기 위해 농사 책을 만들었다","신분이 낮은 장영실 같은 인재에게도 기회를 주었다"],
+  l:["지도자는 국민을 아껴야 한다","나의 지식을 남을 위해 써야 한다","모든 사람이 배울 수 있어야 한다","창의적이어야 한다","다른 사람의 말을 잘 들어야 한다"],
+  s:"그는 백성을 너무 사랑해서 한글을 만들었다"},
+ {n:"마하트마 간디",k:["간디","gandhi"],p:"남",b:"1869년, 인도 포르반다르",
+  d:["폭력 없이 인도의 독립을 위해 싸웠다","남아프리카에서 인도 사람들이 받는 차별에 맞섰다","1930년 '소금 행진'을 이끌었다","검소하고 소박하게 살았다","가난한 사람들을 돕고 차별에 반대했다"],
+  l:["평화가 폭력보다 강하다","옳은 것을 위해 용기 있게 나서야 한다","싸우지 않고도 세상을 바꿀 수 있다","모든 사람을 평등하게 대해야 한다","검소하게 살아야 한다"],
+  s:"그는 너무 평화로워서 사람들이 그를 '위대한 영혼'이라고 불렀다"},
+ {n:"이순신",k:["이순신","순신","충무공","leesunsin","sunsin"],p:"남",b:"1545년, 한양(지금의 서울)",
+  d:["임진왜란 때 바다에서 나라를 지켰다","거북선을 만들어 전투에 사용했다","한산도 대첩에서 크게 이겼다","적은 수의 배로 명량 해전에서 승리했다","전쟁 중의 일을 『난중일기』에 기록했다"],
+  l:["어려운 상황에서도 포기하지 말아야 한다","미리 철저하게 준비해야 한다","맡은 일에 책임감을 가져야 한다","나라와 이웃을 위한 용기가 필요하다","기록하고 돌아보는 습관이 중요하다"],
+  s:"그는 너무 용감해서 적은 배로도 큰 승리를 거두었다"},
+ {n:"안창호",k:["안창호","도산","창호","anchangho","changho"],p:"남",b:"1878년, 평안남도 강서",
+  d:["미국에서 한인들을 돕고 한인 단체를 만들었다","독립운동 단체 '신민회'를 만드는 데 앞장섰다","대성학교를 세워 학생들을 가르쳤다","인재를 기르기 위해 '흥사단'을 만들었다","대한민국 임시정부에서 독립운동을 했다"],
+  l:["교육과 실력을 기르는 것이 중요하다","거짓 없이 정직해야 한다","나부터 먼저 바뀌어야 한다","힘을 모아 함께해야 한다","꾸준히 노력해야 한다"],
+  s:"그는 너무 정직해서 많은 사람들이 그를 믿고 따랐다"},
+ {n:"알베르트 슈바이처",k:["슈바이처","schweitzer"],p:"남",b:"1875년, 알자스 지방 카이저스베르크(지금의 프랑스)",
+  d:["아프리카 사람들을 돕기 위해 의학을 공부했다","가봉 랑바레네에 병원을 지었다","그곳에서 수많은 환자를 치료했다","병원 운영비를 모으려고 오르간 연주회를 열었다","1952년 노벨 평화상을 받았다"],
+  l:["모든 생명은 소중하다","새로운 일을 시작하기에 늦은 때는 없다","나의 재능을 남을 위해 써야 한다","살아 있는 모든 것을 존중해야 한다","한 사람이 큰 변화를 만들 수 있다"],
+  s:"그는 너무 헌신적이어서 인생의 대부분을 아프리카에서 보냈다"}
+];
+const norm=s=>s.toLowerCase().replace(/[\s.\-·'"()]/g,"");
+function findPerson(q){const t=norm(q);if(!t)return null;return DB.find(x=>x.k.some(k=>t.includes(norm(k)))||t.includes(norm(x.n)))||null;}
+const logEl=document.getElementById("log");
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function say(node){logEl.appendChild(node);node.scrollIntoView({block:"nearest",behavior:"smooth"});}
+function reply(q){
+  say(el("div","msg me",q));
+  const p=findPerson(q),m=el("div","msg ai");
+  if(!p){
+    m.appendChild(el("h4",null,"🤔 수행평가 인물 목록에 없는 이름이에요"));
+    m.appendChild(el("p","hint","이번 수행평가 인물은 아래 8명이에요. 이름을 다시 확인하거나 아래에서 골라 보세요."));
+    const q2=el("div","quick");DB.forEach(x=>{const b=el("button",null,x.n);b.type="button";b.onclick=()=>reply(x.n);q2.appendChild(b);});
+    m.appendChild(q2);say(m);return;
+  }
+  const he=p.p==="남"?"He":"She";
+  m.appendChild(el("h4",null,"🍀 "+p.n));
+  m.appendChild(el("p","born","📍 태어난 때와 곳: "+p.b));
+  const opts=el("div","opts");
+  [["✨ 한 일 (What did "+he.toLowerCase()+" do?)",p.d],["💡 배울 점 (What did you learn?)",p.l]].forEach(([t,arr])=>{
+    const box=el("div");box.appendChild(el("h5",null,t));const ol=el("ol");arr.forEach(s=>ol.appendChild(el("li",null,s)));box.appendChild(ol);opts.appendChild(box);
+  });
+  m.appendChild(opts);
+  m.appendChild(el("p","so","⭐ so ~ that으로 바꿔 볼 문장: "+p.s+"."));
+  m.appendChild(el("p","hint","✏️ 각각 2개씩 골라서 영어로 바꿔 Plan 표에 써요. 한 일은 과거형, 주어는 "+he+", 배울 점은 I learned that ~ 을 기억해요!"));
+  say(m);
+}
+(function(){
+  const qk=document.getElementById("quick");qk.appendChild(el("span",null,"수행평가 인물"));
+  DB.map(x=>x.n).forEach(n=>{const b=el("button",null,n);b.type="button";b.onclick=()=>reply(n);qk.appendChild(b);});
+  const hi=el("div","msg ai");hi.appendChild(el("h4",null,"안녕하세요! 🍀"));
+  hi.appendChild(el("p","hint","전기문에 쓸 인물 이름을 입력해 보세요. 그 인물이 한 일과 우리가 배울 점을 우리말로 5가지씩 알려 줄게요."));
+  logEl.appendChild(hi);
+  document.getElementById("ask").addEventListener("submit",e=>{e.preventDefault();const i=document.getElementById("askInput");const v=i.value.trim();if(v){reply(v);i.value="";}});
+})();
 
 function go(n){
   [1,2,3].forEach(i=>{
